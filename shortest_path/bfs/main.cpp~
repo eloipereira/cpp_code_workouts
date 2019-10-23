@@ -1,0 +1,48 @@
+#include<iostream>
+#include<vector>
+
+using namespace std;
+
+class Edge{
+public:
+  Edge(int s, int d);
+  int source;
+  int dest;
+};
+
+Edge::Edge(int s, int d){
+  source = s;
+  dest = d;
+};
+
+class Graph{
+public:
+  Graph();
+  addEdge(int s, int d);
+  print_graph();
+private:
+  vector<Edge> edges;
+};
+
+Graph::Graph(){
+  edges = {};
+}
+
+Graph::addEdge(int s, int d){
+  edges.push_back(Edge(s,d));
+}
+
+Graph::print_graph(){
+  for(auto e: edges){
+    cout << e.source << " -> " << e.tail << endl;
+  }
+}
+
+int main(int argc, char *argv[])
+{
+  Graph g = Graph();
+  g.addEdge(0,1);
+  g.addEdge(1,0);
+  g.print_graph();
+  return 0;
+}
