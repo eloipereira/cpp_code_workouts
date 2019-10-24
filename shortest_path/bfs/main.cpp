@@ -1,6 +1,9 @@
 #include <iostream>
 #include <vector>
 #include <queue>
+#include <stack>
+#include <algorithm>
+
 
 using namespace std;
 
@@ -17,6 +20,7 @@ public:
   void printGraph();
   int getNumVertices();
   vector<int> bfs(int s);
+  stack<int> shortest_path(int s,int d);
 };
 
 
@@ -69,6 +73,21 @@ vector<int> Graph::bfs(int s){
 }
 
 
+stack<int> Graph::shortest_path(int s, int d){
+  vector<int> b = bfs(s);
+  stack<int> path;
+  if (b[d] != -1){
+    int prev = b[d];
+    path.push(d);
+    while(prev != s){
+      path.push(prev);
+      prev = b[prev];
+    }
+    path.push(s);
+  }
+  return path;
+}
+
 int main(){
   vector<Edge> edges = {
 			{ 0, 1 }, { 1, 2 }, { 2, 0 }, { 2, 1 },
@@ -87,5 +106,12 @@ int main(){
     else
       cout << " unreachable" << endl;
   }
+
+  stack<int> path =  graph.shortest_path(0,2);
+  while (path.size() > 0){
+    cout << path.top() << " ";
+    path.pop();
+  }
+  cout << endl;
   return 0;
 }
