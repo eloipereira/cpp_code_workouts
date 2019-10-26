@@ -2,30 +2,30 @@
 #include <vector>
 #include <queue>
 #include <stack>
+#include <map>
 #include <algorithm>
 
 
 using namespace std;
 
 
-struct Edge {
-  int src, dest;
-};
-
-
+template<typename T>
 class Graph{
 public:
-  vector<vector<int>> adjList;
+  struct Edge {
+    T src, dest;
+  };
+
+  map<T,vector<T>> adjList;
   Graph(vector<Edge> const &edges, int N);
   void printGraph();
   int getNumVertices();
-  vector<int> bfs(int s);
-  stack<int> shortest_path(int s,int d);
+  map<T,T> bfs(T s);
+  stack<T> shortest_path(T s,T d);
 };
 
-
-Graph::Graph(vector<Edge> const &edges, int N){		
-  adjList.resize(N);
+template<typename T>
+Graph<T>::Graph(vector<Edge> const &edges, int N){		
   for (auto edge: edges){
     adjList[edge.src].push_back(edge.dest);
     // Uncomment below line for undirected graph
@@ -33,34 +33,37 @@ Graph::Graph(vector<Edge> const &edges, int N){
   }
 }
 
-int Graph::getNumVertices(){
+template<typename T>
+int Graph<T>::getNumVertices(){
   return adjList.size();
 }
 
-void Graph::printGraph(){
+template<typename T>
+void Graph<T>::printGraph(){
   int N = getNumVertices();
-  for (int i = 0; i < N; i++){
-    cout << i << " --> ";
-    for (int v : adjList[i])
+  for (auto i: adjList){
+    cout << i.first << " --> ";
+    for (auto v : i.second)
       cout << v << " ";
     cout << endl;
   }
 }
 
-vector<int> Graph::bfs(int s){
+template<typename T>
+map<T,T> Graph<T>::bfs(T s){
   
   int N = getNumVertices();
-  vector<int> reached_from(N,-1);
-  vector<bool> visited(N,false);
+  map<T,T> reached_from;
+  map<T,bool> visited;
 
-  queue<int> q;
+  queue<T> q;
   q.push(s);
   visited[s] = true;
   
   while(!q.empty()){
     int current = q.front();
     q.pop();
-    vector<int> neighbours = adjList[current];
+    vector<T> neighbours = adjList[current];
     for(auto n: neighbours){
       if(!visited[n]){
 	q.push(n);
@@ -72,12 +75,12 @@ vector<int> Graph::bfs(int s){
   return reached_from;
 }
 
-
-stack<int> Graph::shortest_path(int s, int d){
-  vector<int> b = bfs(s);
-  stack<int> path;
-  if (b[d] != -1){
-    int prev = b[d];
+template<typename T>
+stack<T> Graph<T>::shortest_path(T s, T d){
+  map<T,T> b = bfs(s);
+  stack<T> path;
+  if (b.find(d) != b.end()){
+    T prev = b[d];
     path.push(d);
     while(prev != s){
       path.push(prev);
@@ -89,22 +92,18 @@ stack<int> Graph::shortest_path(int s, int d){
 }
 
 int main(){
-  vector<Edge> edges = {
+  vector<Graph<int>::Edge> edges = {
 			{ 0, 1 }, { 1, 2 }, { 2, 0 }, { 2, 1 },
 			{ 3, 2 }, { 4, 5 }, { 5, 4 }
   };
 
-  Graph graph(edges, 6);
+  Graph<int> graph(edges, 6);
   graph.printGraph();
 
-  vector<int> result = graph.bfs(0);
+  map<int,int> result = graph.bfs(0);
 
-  for (int i = 0; i < result.size(); i++){
-    cout << i;
-    if (result[i]>=0)
-      cout << " reached from " << result[i] << endl;
-    else
-      cout << " unreachable" << endl;
+  for (auto i: result){
+    cout << i.first << " reached from " << i.second << endl;
   }
 
   stack<int> path =  graph.shortest_path(0,2);
