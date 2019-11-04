@@ -9,10 +9,13 @@
 #include <set>
 #include <algorithm>
 #include <utility>
+#include <type_traits>
 #include "utils.h"
+
 
 template<typename T, typename W>
 class WGraph{
+  static_assert(std::is_arithmetic<W>::value, "Weights type must be numeric.");
 public:
   WGraph();
   ~WGraph();
@@ -22,6 +25,7 @@ public:
   int getNumVertices() const;
   std::vector<T>& getVertices() const;
   std::vector<T>& at(T n) const;
+  W getWeight(T s, T d) const;
 private:
   std::map<T,std::vector<T>>* adjList;
   std::map<std::pair<T,T>,W>* weights;
@@ -64,7 +68,7 @@ int WGraph<T,W>::getNumVertices() const{
 
 template<typename T, typename W>
 std::vector<T>& WGraph<T,W>::getVertices() const{
-  return vertices;
+  return (*vertices);
 };
 
 template<typename T, typename W>
@@ -82,5 +86,9 @@ void WGraph<T,W>::printGraph(){
   }
 };
 
+template<typename T,typename W>
+W WGraph<T,W>::getWeight(T s, T d) const{
+  return (*weights)[std::make_pair(s,d)];
+};
 
 #endif

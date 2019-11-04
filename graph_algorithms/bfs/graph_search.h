@@ -2,6 +2,7 @@
 #define GRAPH_SEARCH_H
 
 #include <iostream>
+#include <limits>
 #include "graph.h"
 #include "weighted_graph.h"
 
@@ -84,6 +85,40 @@ map<T,T> dfs(const Graph<T>& g, const T& s, bool print = false){
   return reached_from;
 }
 
+template<typename T, typename W>
+struct dijkstra_result{
+  map<T,T> reached_from;
+  map<T,W> dist;
+};
 
+template<typename T, typename W>
+dijkstra_result<T,W> dijkstra_shortest_path(const WGraph<T,W>& wg, T s){
+  W max_val = std::numeric_limits<W>::max();
+  map<T,T> reached_from;
+  priority_queue<pair<T,T>, vector<pair<T,T>>, greater<pair<T,T>>> pq;
+  pq.push(make_pair(0,s));
+  map<T,W> dist;
+  dist[s] = 0;
+  for(auto v: wg.getVertices()){
+    if (v != s)
+      dist[v] = max_val;
+    pq.push(make_pair(dist[v],v));
+  }
+
+  while (!pq.empty()) {
+    T u = pq.top().second;
+    pq.pop();
+    for(auto v: wg.at(u)){
+      W alt = dist[u] + wg.getWeight(u,v);
+      if (alt < dist[v]){
+        dist[v] = alt;
+        reached_from[v] = u;
+        pq.push(make_pair(dist[v],v));
+      }
+    }
+  }
+
+  return {reached_from,dist};
+}
 
 #endif

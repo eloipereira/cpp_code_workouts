@@ -13,50 +13,45 @@
 template<typename T>
 class Graph{
 public:
-  struct Edge {
-    T src, dest;
-  };
   Graph();
-  Graph(std::vector<Edge> const &edges);
   ~Graph();
   int size;
   void add_edge(T s, T d);
   void printGraph();
   int getNumVertices() const;
-  std::vector<T> getVertices() const;
-  std::vector<T> & at(T n) const;
+  std::vector<T>& getVertices() const;
+  std::vector<T>& at(T n) const;
 private:
   std::map<T,std::vector<T>>* adjList;
+  std::vector<T>* vertices;
 };
 
 
 template<typename T>
 Graph<T>::Graph(){
   adjList = new std::map<T,std::vector<T>>();
+  vertices = new std::vector<T>();
   size = 0;
 };
 
-template<typename T>
-Graph<T>::Graph(std::vector<Edge> const &edges){
-  adjList = new std::map<T,std::vector<T>>();
-  for (auto edge: edges){
-    if ((*adjList).find(edge.src) == (*adjList).end())
-      size = size + 1;
-
-    (*adjList)[edge.src].push_back(edge.dest);
-    // Uncomment below line for undirected graph
-    // adjList[edge.dest].push_back(edge.src);
-  }
-};
 
 template<typename T>
 Graph<T>::~Graph(){
   //std::cout << "Deleting graph..." << std::endl;
   delete adjList;
+  delete vertices;
 };
 
 template<typename T>
 void Graph<T>::add_edge(T s, T d){
+  if (std::find(vertices->begin(), vertices->end(), s) == vertices->end()){
+    vertices->push_back(s);
+    size = size + 1;
+  }
+  if (std::find(vertices->begin(), vertices->end(), d) == vertices->end()){
+    vertices->push_back(d);
+    size = size + 1;
+  }
   (*adjList)[s].push_back(d);
 };
 
@@ -66,12 +61,12 @@ int Graph<T>::getNumVertices() const{
 };
 
 template<typename T>
-std::vector<T> Graph<T>::getVertices() const{
-  return get_keys(*adjList);
+std::vector<T>& Graph<T>::getVertices() const{
+  return (*vertices);
 };
 
 template<typename T>
-std::vector<T> & Graph<T>::at(T n) const{
+std::vector<T>& Graph<T>::at(T n) const{
   return (*adjList)[n];
 }
 
