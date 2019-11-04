@@ -8,13 +8,10 @@
 #include <map>
 #include <set>
 #include <algorithm>
-
-template<typename T0, typename T1>
-std::vector<T0> get_keys(const std::map<T0,T1> & m);
+#include "utils.h"
 
 template<typename T>
 class Graph{
-
 public:
   struct Edge {
     T src, dest;
@@ -32,16 +29,6 @@ private:
   std::map<T,std::vector<T>>* adjList;
 };
 
-template<typename T0, typename T1>
-std::vector<T0> get_keys(const std::map<T0,T1> & m){
-  std::vector<T0> result;
-  typename std::map<T0,T1>::iterator it;
-  for(auto const& e: m){
-    result.push_back(e.first);
-  }
-  return result;
-};
-
 
 template<typename T>
 Graph<T>::Graph(){
@@ -53,8 +40,10 @@ template<typename T>
 Graph<T>::Graph(std::vector<Edge> const &edges){
   adjList = new std::map<T,std::vector<T>>();
   for (auto edge: edges){
+    if ((*adjList).find(edge.src) == (*adjList).end())
+      size = size + 1;
+
     (*adjList)[edge.src].push_back(edge.dest);
-    size = size + 1;
     // Uncomment below line for undirected graph
     // adjList[edge.dest].push_back(edge.src);
   }

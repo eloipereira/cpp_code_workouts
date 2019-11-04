@@ -2,6 +2,7 @@
 #include <fstream>
 #include "graph.h"
 #include "graph_search.h"
+#include "weighted_graph.h"
 
 using namespace std;
 
@@ -29,8 +30,15 @@ int main(){
   while (file1 >> s >> d)
     graph1.add_edge(s,d);
   graph1.printGraph();
-
   map<int,int> result_dfs = dfs(graph1,0, true);
 
+
+  std::ifstream file2("graph2.txt");
+  float w;
+  WGraph<int,float> wgraph0;
+  while (file2 >> s >> d >> w)
+    wgraph0.add_edge(s,d,w);
+    
+  wgraph0.printGraph();
   return 0;
 }

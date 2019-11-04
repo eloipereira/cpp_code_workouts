@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include "graph.h"
+#include "weighted_graph.h"
 
 using namespace std;
 
