@@ -1,0 +1,1 @@
+/usr/bin/c++     CMakeFiles/exec_bfs_test.dir/graph_tests.cpp.o  -o exec_bfs_test /usr/lib/libgtest.a -lpthread ../src/libgraph_lib.a 

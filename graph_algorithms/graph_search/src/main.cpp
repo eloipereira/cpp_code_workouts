@@ -16,7 +16,7 @@ int main(){
     graph0.add_edge(s,d);
 
   graph0.printGraph();
-  map<int,int> result_bfs = bfs(graph0,0, true);
+  auto result_bfs = bfs(graph0,0, true);
 
   stack<int> path =  shortest_path(graph0,0,5);
   while (path.size() > 0){
@@ -30,7 +30,7 @@ int main(){
   while (file1 >> s >> d)
     graph1.add_edge(s,d);
   graph1.printGraph();
-  map<int,int> result_dfs = dfs(graph1,0, true);
+  auto result_dfs = dfs(graph1,0, true);
 
 
   std::ifstream file2("graph2.txt");

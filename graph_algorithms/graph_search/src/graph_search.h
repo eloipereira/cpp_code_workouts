@@ -9,15 +9,20 @@
 using namespace std;
 
 template<typename T>
-map<T,T> bfs(const Graph<T>& g, const T& s, bool print = false){
+struct bfs_result{
+  map<T,T> reached_from;
+  vector<T> order_visited;
+};
 
+template<typename T>
+bfs_result<T> bfs(const Graph<T>& g, const T& s, bool print = false){
   map<T,T> reached_from;
   map<T,bool> visited;
-
+  vector<T> order_visited;
   queue<T> q;
   q.push(s);
   visited[s] = true;
-
+  order_visited.push_back(s);
   while(!q.empty()){
     int current = q.front();
     q.pop();
@@ -26,18 +31,20 @@ map<T,T> bfs(const Graph<T>& g, const T& s, bool print = false){
       if(!visited[n]){
         q.push(n);
         visited[n] = true;
+        order_visited.push_back(n);
         if(print)
           cout << n << " visited!" << endl;
         reached_from[n] = current;
       }
     }
   }
-  return reached_from;
+  return {reached_from,order_visited};
 }
 
 template<typename T>
 stack<T> shortest_path(const Graph<T>& g, const T& s, const T& d){
-  map<T,T> b = bfs(g,s);
+  auto bfs_result = bfs(g,s);
+  auto b = bfs_result.reached_from;
   stack<T> path;
   if (b.find(d) != b.end()){
     T prev = b[d];
@@ -51,11 +58,17 @@ stack<T> shortest_path(const Graph<T>& g, const T& s, const T& d){
   return path;
 }
 
+template<typename T>
+struct dfs_result{
+  map<T,T> reached_from;
+  vector<T> order_visited;
+};
 
 template<typename T>
-map<T,T> dfs(const Graph<T>& g, const T& s, bool print = false){
+dfs_result<T> dfs(const Graph<T>& g, const T& s, bool print = false){
   map<T,T> reached_from;
   map<T,bool> visited;
+  vector<T> order_visited;
 
   for(auto v: g.getVertices()){
     visited[v] = false;
@@ -69,6 +82,7 @@ map<T,T> dfs(const Graph<T>& g, const T& s, bool print = false){
     st.pop();
 
     if(!visited[current]){
+      order_visited.push_back(current);
       if(print)
         cout<< current << " visited!"<<endl;
       visited[current] = true;
@@ -82,7 +96,7 @@ map<T,T> dfs(const Graph<T>& g, const T& s, bool print = false){
       }
     }
   }
-  return reached_from;
+  return {reached_from,order_visited};
 }
 
 template<typename T, typename W>

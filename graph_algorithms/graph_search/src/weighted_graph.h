@@ -10,11 +10,11 @@
 #include <algorithm>
 #include <utility>
 #include <type_traits>
+#include "graph.h"
 #include "utils.h"
 
-
 template<typename T, typename W>
-class WGraph{
+class WGraph: public Graph<T>{
   static_assert(std::is_arithmetic<W>::value, "Weights type must be numeric.");
 public:
   WGraph();
