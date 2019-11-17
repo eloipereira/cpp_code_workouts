@@ -1,3 +1,0 @@
-/home/eloi/Code/cpp_code_workouts/graph_algorithms/bfs/src/CMakeFiles/rebuild_cache.dir
-/home/eloi/Code/cpp_code_workouts/graph_algorithms/bfs/src/CMakeFiles/graph.dir
-/home/eloi/Code/cpp_code_workouts/graph_algorithms/bfs/src/CMakeFiles/edit_cache.dir
